@@ -1,0 +1,37 @@
+{
+  "name": "pizzaflow-api",
+  "version": "1.0.0",
+  "description": "API REST para gerenciamento de pedidos de pizzaria de bairro - PizzaFlow API",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "test": "jest --runInBand --verbose --no-cache",
+    "test:watch": "jest --watch --no-cache"
+  },
+  "keywords": [
+    "nodejs",
+    "express",
+    "api-rest",
+    "pizzaflow",
+    "jest",
+    "supertest"
+  ],
+  "author": "Pedro Akylas (RGM: 45543232) & Rafaela Marques (RGM: 46321365)",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.21.2"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0",
+    "supertest": "^7.0.0"
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "testMatch": [
+      "**/tests/**/*.test.js"
+    ],
+    "verbose": true,
+    "clearMocks": true,
+    "cacheDirectory": ".jest-cache"
+  }
+}

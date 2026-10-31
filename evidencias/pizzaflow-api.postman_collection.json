@@ -1,0 +1,155 @@
+{
+	"info": {
+		"_postman_id": "pizzaflow-api-collection-v1",
+		"name": "PizzaFlow API",
+		"description": "Coleção de requisições para a PizzaFlow API.\nBaseUrl padrão: http://localhost:3000",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "http://localhost:3000",
+			"type": "string"
+		}
+	],
+	"item": [
+		{
+			"name": "01 - Criação de Pedido Válido (POST 201)",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"cliente\": \"Carlos Silva\",\n  \"tipo\": \"entrega\",\n  \"valor\": 350,\n  \"prioridade\": \"normal\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/pedidos",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"pedidos"
+					]
+				},
+				"description": "Cria um pedido válido. Espera 201 com o pedido criado e status recebido."
+			},
+			"response": []
+		},
+		{
+			"name": "02 - Validação: Criação Inválida (POST 400)",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"cliente\": \"   \",\n  \"tipo\": \"motoboy\",\n  \"valor\": -10,\n  \"prioridade\": \"maxima\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/pedidos",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"pedidos"
+					]
+				},
+				"description": "Tenta criar pedido com dados inválidos. Espera 400 com lista de erros em detalhes."
+			},
+			"response": []
+		},
+		{
+			"name": "03 - Listagem de Pedidos (GET 200)",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/pedidos",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"pedidos"
+					]
+				},
+				"description": "Lista todos os pedidos cadastrados. Espera 200 com array de pedidos."
+			},
+			"response": []
+		},
+		{
+			"name": "04 - Consulta por ID Inexistente (GET 404)",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/pedidos/9999",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"pedidos",
+						"9999"
+					]
+				},
+				"description": "Busca pedido com ID inexistente. Espera 404 com mensagem de erro padronizada."
+			},
+			"response": []
+		},
+		{
+			"name": "05 - Atualização de Status Válida (PATCH 200)",
+			"request": {
+				"method": "PATCH",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"status\": \"em_preparacao\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/pedidos/1/status",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"pedidos",
+						"1",
+						"status"
+					]
+				},
+				"description": "Atualiza status do pedido 1 para em_preparacao. Espera 200. Execute a requisição 01 antes desta."
+			},
+			"response": []
+		}
+	]
+}
