@@ -74,6 +74,7 @@ pizzaflow-api/
 ├── tests/
 │   ├── pedido.validator.test.js         → Testes unitários do validator
 │   ├── pedido.service.test.js           → Testes unitários do service
+│   ├── pedido.repository.test.js        → Testes unitários do repository
 │   └── pedido.routes.test.js            → Testes de integração com Supertest
 ├── evidencias/
 │   ├── pizzaflow-api.postman_collection.json
@@ -269,6 +270,11 @@ Content-Type: application/json
 - Obrigatório, tipo `number` literal (não aceita strings como `"350"`, `NaN`, `Infinity`, `null` ou `boolean`).
 - Deve ser maior que zero (`valor > 0`).
 
+### Identificadores de pedidos (`id`)
+- Devem conter apenas dígitos decimais; notações como `1e2` e `0x1` não são aceitas.
+- Devem representar um inteiro positivo seguro, entre `1` e `9007199254740991`.
+- Zeros à esquerda são aceitos; por exemplo, `00042` corresponde ao pedido `42`.
+
 ---
 
 ## Tabela de Transições de Status
@@ -314,7 +320,7 @@ Content-Type: application/json
 | Status inválido ou ausente no PATCH | `400 Bad Request` |
 | Transição de status não permitida | `400 Bad Request` |
 | Pedido não encontrado (ID inexistente) | `404 Not Found` |
-| ID não numérico, decimal ou menor que 1 | `404 Not Found` |
+| ID em formato inválido, inexistente, menor que 1 ou fora do limite seguro | `404 Not Found` |
 | Rota não existente | `404 Not Found` |
 | Erro inesperado (bug interno) | `500 Internal Server Error` |
 
@@ -385,4 +391,3 @@ A IA foi utilizada neste projeto nas seguintes tarefas:
 #### ❌ Sugestão REJEITADA
 *[Substitua pelo que realmente aconteceu]*
 **Exemplo de preenchimento:** A IA sugeriu usar `uuid` como identificador dos pedidos em vez de inteiros incrementais. Rejeitamos porque o enunciado especifica explicitamente um contador incremental, e UUIDs tornam os exemplos de requisição menos didáticos.
-
