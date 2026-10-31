@@ -194,6 +194,12 @@ describe('Testes de Integração de Rotas: /pedidos', () => {
 
       const resNegativo = await request(app).get('/pedidos/-5');
       expect(resNegativo.status).toBe(404);
+
+      const resNotacaoExponencial = await request(app).get('/pedidos/1e2');
+      expect(resNotacaoExponencial.status).toBe(404);
+
+      const resForaDoLimiteSeguro = await request(app).get('/pedidos/9007199254740992');
+      expect(resForaDoLimiteSeguro.status).toBe(404);
     });
   });
 
@@ -341,4 +347,3 @@ describe('Testes de Integração de Rotas: /pedidos', () => {
     });
   });
 });
-

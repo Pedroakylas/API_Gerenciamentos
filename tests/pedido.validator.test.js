@@ -151,6 +151,7 @@ describe('Camada de Validação: pedido.validator', () => {
     test('deve converter e retornar número inteiro positivo', () => {
       expect(validarId(1)).toBe(1);
       expect(validarId('42')).toBe(42);
+      expect(validarId('00042')).toBe(42);
     });
 
     test('deve lançar NaoEncontradoError (404) para IDs não numéricos, decimais ou menores que 1', () => {
@@ -158,7 +159,11 @@ describe('Camada de Validação: pedido.validator', () => {
       expect(() => validarId('1.5')).toThrow(NaoEncontradoError);
       expect(() => validarId(0)).toThrow(NaoEncontradoError);
       expect(() => validarId('-5')).toThrow(NaoEncontradoError);
+      expect(() => validarId('1e2')).toThrow(NaoEncontradoError);
+      expect(() => validarId('0x1')).toThrow(NaoEncontradoError);
+      expect(() => validarId('9007199254740992')).toThrow(NaoEncontradoError);
+      expect(() => validarId(true)).toThrow(NaoEncontradoError);
+      expect(() => validarId(NaN)).toThrow(NaoEncontradoError);
     });
   });
 });
-

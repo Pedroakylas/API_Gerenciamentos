@@ -121,11 +121,15 @@ function validarAtualizacaoStatus(dados) {
  * @throws {NaoEncontradoError} Se o identificador não for um inteiro >= 1.
  */
 function validarId(idParam) {
-  const idNum = Number(idParam);
-  if (!Number.isInteger(idNum) || idNum < 1) {
+  const formatoValido = typeof idParam === 'number'
+    ? Number.isSafeInteger(idParam)
+    : typeof idParam === 'string' && /^[0-9]+$/.test(idParam);
+  const idNum = formatoValido ? Number(idParam) : NaN;
+
+  if (!Number.isSafeInteger(idNum) || idNum < 1) {
     throw new NaoEncontradoError(
       `Pedido com ID '${idParam}' não encontrado.`,
-      ['O identificador deve ser um número inteiro positivo correspondente a um pedido existente.']
+      ['O identificador deve conter apenas dígitos e representar um número inteiro positivo seguro correspondente a um pedido existente.']
     );
   }
   return idNum;
@@ -136,4 +140,3 @@ module.exports = {
   validarAtualizacaoStatus,
   validarId
 };
-
