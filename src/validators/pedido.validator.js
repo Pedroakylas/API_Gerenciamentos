@@ -77,6 +77,29 @@ function validarCriacao(dados) {
   };
 }
 
+function validarFiltrosListagem(filtros) {
+  const erros = [];
+  const filtrosPermitidos = ['tipo', 'status'];
+
+  for (const [campo, valor] of Object.entries(filtros)) {
+    if (!filtrosPermitidos.includes(campo)) {
+      erros.push(`O filtro '${campo}' não é permitido.`);
+    } else if (typeof valor !== 'string') {
+      erros.push(`O filtro '${campo}' deve ser uma string.`);
+    } else if (campo === 'tipo' && !TIPOS_PEDIDO.includes(valor)) {
+      erros.push(`O filtro 'tipo' é inválido. Valores permitidos: [${TIPOS_PEDIDO.join(', ')}].`);
+    } else if (campo === 'status' && !STATUS_PEDIDO.includes(valor)) {
+      erros.push(`O filtro 'status' é inválido. Valores permitidos: [${STATUS_PEDIDO.join(', ')}].`);
+    }
+  }
+
+  if (erros.length > 0) {
+    throw new RequisicaoInvalidaError('Filtros de listagem inválidos.', erros);
+  }
+
+  return { ...filtros };
+}
+
 /**
  * Valida o payload de atualização de status de um pedido.
  * 
@@ -137,6 +160,7 @@ function validarId(idParam) {
 
 module.exports = {
   validarCriacao,
+  validarFiltrosListagem,
   validarAtualizacaoStatus,
   validarId
 };

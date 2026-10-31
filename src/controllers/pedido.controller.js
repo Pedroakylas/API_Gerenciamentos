@@ -30,7 +30,7 @@ class PedidoController {
    */
   listar(req, res, next) {
     try {
-      const pedidos = pedidoService.listarPedidos();
+      const pedidos = pedidoService.listarPedidos(req.query);
       return res.status(200).json(pedidos);
     } catch (err) {
       return next(err);
@@ -65,4 +65,3 @@ class PedidoController {
 }
 
 module.exports = new PedidoController();
-

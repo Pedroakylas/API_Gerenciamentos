@@ -50,8 +50,12 @@ class PedidoService {
    * 
    * @returns {Object[]} Lista com todos os pedidos.
    */
-  listarPedidos() {
-    return this.repository.listarTodos();
+  listarPedidos(filtros = {}) {
+    const filtrosValidados = pedidoValidator.validarFiltrosListagem(filtros);
+    return this.repository.listarTodos().filter(pedido => (
+      (!filtrosValidados.tipo || pedido.tipo === filtrosValidados.tipo)
+      && (!filtrosValidados.status || pedido.status === filtrosValidados.status)
+    ));
   }
 
   /**
@@ -127,4 +131,3 @@ class PedidoService {
 const pedidoService = new PedidoService();
 module.exports = pedidoService;
 module.exports.PedidoService = PedidoService;
-

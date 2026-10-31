@@ -170,6 +170,46 @@ describe('Testes de Integração de Rotas: /pedidos', () => {
       expect(res.body[0].cliente).toBe('Pedro Akylas');
       expect(res.body[1].cliente).toBe('Pedro Akylas');
     });
+
+    test('deve filtrar pedidos por tipo, status e combinação dos dois', async () => {
+      const entrega = await request(app).post('/pedidos').send({
+        cliente: 'Pedro Akylas',
+        tipo: 'entrega',
+        valor: 350,
+        prioridade: 'normal'
+      });
+      await request(app).post('/pedidos').send({
+        cliente: 'Pedro Akylas',
+        tipo: 'retirada',
+        valor: 90,
+        prioridade: 'normal'
+      });
+      await request(app).patch(`/pedidos/${entrega.body.id}/status`)
+        .send({ status: 'em_preparacao' });
+
+      const porTipo = await request(app).get('/pedidos?tipo=retirada');
+      const porStatus = await request(app).get('/pedidos?status=em_preparacao');
+      const combinados = await request(app)
+        .get('/pedidos?tipo=entrega&status=em_preparacao');
+
+      expect(porTipo.status).toBe(200);
+      expect(porTipo.body).toHaveLength(1);
+      expect(porTipo.body[0].tipo).toBe('retirada');
+      expect(porStatus.body).toHaveLength(1);
+      expect(porStatus.body[0].status).toBe('em_preparacao');
+      expect(combinados.body).toHaveLength(1);
+      expect(combinados.body[0].tipo).toBe('entrega');
+    });
+
+    test('deve rejeitar filtros de listagem inválidos', async () => {
+      const tipoInvalido = await request(app).get('/pedidos?tipo=motoboy');
+      const filtroDesconhecido = await request(app).get('/pedidos?cliente=Pedro');
+
+      expect(tipoInvalido.status).toBe(400);
+      expect(tipoInvalido.body.erro).toBe('Filtros de listagem inválidos.');
+      expect(filtroDesconhecido.status).toBe(400);
+      expect(filtroDesconhecido.body.detalhes[0]).toContain('não é permitido');
+    });
   });
 
   describe('GET /pedidos/:id', () => {
