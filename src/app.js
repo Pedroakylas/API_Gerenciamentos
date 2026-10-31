@@ -17,6 +17,10 @@ const app = express();
 // Middleware para parsing de requisições com corpo JSON
 app.use(express.json());
 
+app.get('/health', (req, res) => {
+  return res.status(200).json({ status: 'ok' });
+});
+
 // Montagem das rotas obrigatórias do recurso /pedidos
 app.use('/pedidos', pedidoRoutes);
 
@@ -27,4 +31,3 @@ app.use(naoEncontradoMiddleware);
 app.use(erroMiddleware);
 
 module.exports = app;
-

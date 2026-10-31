@@ -18,6 +18,15 @@ describe('Testes de Integração de Rotas: /pedidos', () => {
     pedidoRepository.resetar();
   });
 
+  describe('GET /health', () => {
+    test('deve indicar que a API está disponível', async () => {
+      const res = await request(app).get('/health');
+
+      expect(res.status).toBe(200);
+      expect(res.body).toEqual({ status: 'ok' });
+    });
+  });
+
   describe('POST /pedidos', () => {
     test('deve criar um pedido com sucesso (201) e retornar o formato exato', async () => {
       const payload = {
