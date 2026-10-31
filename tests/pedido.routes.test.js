@@ -21,7 +21,7 @@ describe('Testes de Integração de Rotas: /pedidos', () => {
   describe('POST /pedidos', () => {
     test('deve criar um pedido com sucesso (201) e retornar o formato exato', async () => {
       const payload = {
-        cliente: 'Carlos Silva',
+        cliente: 'Pedro Akylas',
         tipo: 'entrega',
         valor: 350,
         prioridade: 'normal'
@@ -34,7 +34,7 @@ describe('Testes de Integração de Rotas: /pedidos', () => {
       expect(res.status).toBe(201);
       expect(res.body).toEqual({
         id: 1,
-        cliente: 'Carlos Silva',
+        cliente: 'Pedro Akylas',
         tipo: 'entrega',
         valor: 350,
         prioridade: 'normal',
@@ -44,7 +44,7 @@ describe('Testes de Integração de Rotas: /pedidos', () => {
 
     test('deve ignorar campos extras enviados no body (ex: id e status)', async () => {
       const payload = {
-        cliente: 'Carlos Silva',
+        cliente: 'Pedro Akylas',
         tipo: 'entrega',
         valor: 350,
         prioridade: 'normal',
@@ -60,7 +60,7 @@ describe('Testes de Integração de Rotas: /pedidos', () => {
       expect(res.status).toBe(201);
       expect(res.body).toEqual({
         id: 1,
-        cliente: 'Carlos Silva',
+        cliente: 'Pedro Akylas',
         tipo: 'entrega',
         valor: 350,
         prioridade: 'normal',
@@ -87,11 +87,11 @@ describe('Testes de Integração de Rotas: /pedidos', () => {
 
     test('deve retornar 400 se o valor for zero, negativo, string, null ou NaN', async () => {
       const casos = [
-        { cliente: 'Carlos', tipo: 'entrega', valor: 0, prioridade: 'normal' },
-        { cliente: 'Carlos', tipo: 'entrega', valor: -15, prioridade: 'normal' },
-        { cliente: 'Carlos', tipo: 'entrega', valor: '350', prioridade: 'normal' },
-        { cliente: 'Carlos', tipo: 'entrega', valor: null, prioridade: 'normal' },
-        { cliente: 'Carlos', tipo: 'entrega', valor: NaN, prioridade: 'normal' }
+        { cliente: 'Pedro Akylas', tipo: 'entrega', valor: 0, prioridade: 'normal' },
+        { cliente: 'Pedro Akylas', tipo: 'entrega', valor: -15, prioridade: 'normal' },
+        { cliente: 'Pedro Akylas', tipo: 'entrega', valor: '350', prioridade: 'normal' },
+        { cliente: 'Pedro Akylas', tipo: 'entrega', valor: null, prioridade: 'normal' },
+        { cliente: 'Pedro Akylas', tipo: 'entrega', valor: NaN, prioridade: 'normal' }
       ];
 
       for (const caso of casos) {
@@ -104,7 +104,7 @@ describe('Testes de Integração de Rotas: /pedidos', () => {
 
     test('deve retornar 400 se o tipo ou prioridade forem inválidos', async () => {
       const resTipo = await request(app).post('/pedidos').send({
-        cliente: 'Carlos',
+        cliente: 'Pedro Akylas',
         tipo: 'motoboy', // inválido
         valor: 50,
         prioridade: 'normal'
@@ -112,7 +112,7 @@ describe('Testes de Integração de Rotas: /pedidos', () => {
       expect(resTipo.status).toBe(400);
 
       const resPrioridade = await request(app).post('/pedidos').send({
-        cliente: 'Carlos',
+        cliente: 'Pedro Akylas',
         tipo: 'entrega',
         valor: 50,
         prioridade: 'maxima' // inválido
@@ -142,13 +142,13 @@ describe('Testes de Integração de Rotas: /pedidos', () => {
 
     test('deve retornar 200 com a lista de pedidos cadastrados', async () => {
       await request(app).post('/pedidos').send({
-        cliente: 'Carlos Silva',
+        cliente: 'Pedro Akylas',
         tipo: 'entrega',
         valor: 350,
         prioridade: 'normal'
       });
       await request(app).post('/pedidos').send({
-        cliente: 'Rafaela Marques',
+        cliente: 'Pedro Akylas',
         tipo: 'retirada',
         valor: 120,
         prioridade: 'alta'
@@ -158,8 +158,8 @@ describe('Testes de Integração de Rotas: /pedidos', () => {
 
       expect(res.status).toBe(200);
       expect(res.body).toHaveLength(2);
-      expect(res.body[0].cliente).toBe('Carlos Silva');
-      expect(res.body[1].cliente).toBe('Rafaela Marques');
+      expect(res.body[0].cliente).toBe('Pedro Akylas');
+      expect(res.body[1].cliente).toBe('Pedro Akylas');
     });
   });
 
@@ -200,7 +200,7 @@ describe('Testes de Integração de Rotas: /pedidos', () => {
   describe('PATCH /pedidos/:id/status', () => {
     test('deve atualizar o status com sucesso (200) em transição permitida', async () => {
       const postRes = await request(app).post('/pedidos').send({
-        cliente: 'Carlos Silva',
+        cliente: 'Pedro Akylas',
         tipo: 'entrega',
         valor: 350,
         prioridade: 'normal'
@@ -226,7 +226,7 @@ describe('Testes de Integração de Rotas: /pedidos', () => {
 
     test('Ordem 2: deve retornar 400 se o status for inválido ou ausente em ID existente', async () => {
       const postRes = await request(app).post('/pedidos').send({
-        cliente: 'Carlos Silva',
+        cliente: 'Pedro Akylas',
         tipo: 'entrega',
         valor: 350,
         prioridade: 'normal'
@@ -249,7 +249,7 @@ describe('Testes de Integração de Rotas: /pedidos', () => {
 
     test('Ordem 3: deve retornar 400 para transição proibida ou para o mesmo status', async () => {
       const postRes = await request(app).post('/pedidos').send({
-        cliente: 'Carlos Silva',
+        cliente: 'Pedro Akylas',
         tipo: 'entrega',
         valor: 350,
         prioridade: 'normal'
@@ -273,7 +273,7 @@ describe('Testes de Integração de Rotas: /pedidos', () => {
 
     test('exceção de negócio: retirada/balcao pode ir de em_preparacao direto para entregue', async () => {
       const postRes = await request(app).post('/pedidos').send({
-        cliente: 'Lucas Retirada',
+        cliente: 'Pedro Akylas',
         tipo: 'retirada',
         valor: 90,
         prioridade: 'normal'
@@ -295,7 +295,7 @@ describe('Testes de Integração de Rotas: /pedidos', () => {
 
     test('pedido enviado não pode mais ser cancelado', async () => {
       const postRes = await request(app).post('/pedidos').send({
-        cliente: 'Marcos Entrega',
+        cliente: 'Pedro Akylas',
         tipo: 'entrega',
         valor: 150,
         prioridade: 'urgente'

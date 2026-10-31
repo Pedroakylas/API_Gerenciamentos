@@ -13,7 +13,7 @@ describe('Camada de Validação: pedido.validator', () => {
   describe('validarCriacao()', () => {
     test('deve aceitar um payload válido e aplicar trim no cliente', () => {
       const entrada = {
-        cliente: '  Carlos Silva  ',
+        cliente: '  Pedro Akylas  ',
         tipo: 'entrega',
         valor: 350,
         prioridade: 'normal'
@@ -22,7 +22,7 @@ describe('Camada de Validação: pedido.validator', () => {
       const resultado = validarCriacao(entrada);
 
       expect(resultado).toEqual({
-        cliente: 'Carlos Silva',
+        cliente: 'Pedro Akylas',
         tipo: 'entrega',
         valor: 350,
         prioridade: 'normal'
@@ -31,7 +31,7 @@ describe('Camada de Validação: pedido.validator', () => {
 
     test('deve ignorar campos extras enviados no payload', () => {
       const entrada = {
-        cliente: 'Beatriz Lima',
+        cliente: 'Pedro Akylas',
         tipo: 'retirada',
         valor: 75.5,
         prioridade: 'alta',
@@ -43,7 +43,7 @@ describe('Camada de Validação: pedido.validator', () => {
       const resultado = validarCriacao(entrada);
 
       expect(resultado).toEqual({
-        cliente: 'Beatriz Lima',
+        cliente: 'Pedro Akylas',
         tipo: 'retirada',
         valor: 75.5,
         prioridade: 'alta'

@@ -20,7 +20,7 @@ describe('Camada de Serviço: pedido.service', () => {
   describe('RF01: cadastrar pedido', () => {
     test('deve criar um pedido com status inicial "recebido" e ID incremental', () => {
       const pedido1 = pedidoService.criarPedido({
-        cliente: 'Carlos Silva',
+        cliente: 'Pedro Akylas',
         tipo: 'entrega',
         valor: 350,
         prioridade: 'normal'
@@ -28,7 +28,7 @@ describe('Camada de Serviço: pedido.service', () => {
 
       expect(pedido1).toEqual({
         id: 1,
-        cliente: 'Carlos Silva',
+        cliente: 'Pedro Akylas',
         tipo: 'entrega',
         valor: 350,
         prioridade: 'normal',
@@ -36,7 +36,7 @@ describe('Camada de Serviço: pedido.service', () => {
       });
 
       const pedido2 = pedidoService.criarPedido({
-        cliente: 'Mariana Souza',
+        cliente: 'Pedro Akylas',
         tipo: 'retirada',
         valor: 80,
         prioridade: 'alta'
@@ -48,7 +48,7 @@ describe('Camada de Serviço: pedido.service', () => {
 
     test('deve ignorar campos extras como id e status enviados no cadastro', () => {
       const pedido = pedidoService.criarPedido({
-        cliente: 'Carlos Silva',
+        cliente: 'Pedro Akylas',
         tipo: 'entrega',
         valor: 350,
         prioridade: 'normal',
@@ -70,20 +70,20 @@ describe('Camada de Serviço: pedido.service', () => {
     });
 
     test('deve retornar todos os pedidos cadastrados', () => {
-      pedidoService.criarPedido({ cliente: 'Ana', tipo: 'balcao', valor: 45, prioridade: 'baixa' });
-      pedidoService.criarPedido({ cliente: 'Bruno', tipo: 'encomenda', valor: 120, prioridade: 'urgente' });
+      pedidoService.criarPedido({ cliente: 'Pedro Akylas', tipo: 'balcao', valor: 45, prioridade: 'baixa' });
+      pedidoService.criarPedido({ cliente: 'Pedro Akylas', tipo: 'encomenda', valor: 120, prioridade: 'urgente' });
 
       const pedidos = pedidoService.listarPedidos();
       expect(pedidos).toHaveLength(2);
-      expect(pedidos[0].cliente).toBe('Ana');
-      expect(pedidos[1].cliente).toBe('Bruno');
+      expect(pedidos[0].cliente).toBe('Pedro Akylas');
+      expect(pedidos[1].cliente).toBe('Pedro Akylas');
     });
   });
 
   describe('RF03: consultar pedido por ID', () => {
     test('deve retornar o pedido quando o ID existir', () => {
       const criado = pedidoService.criarPedido({
-        cliente: 'Fernanda',
+        cliente: 'Pedro Akylas',
         tipo: 'retirada',
         valor: 90,
         prioridade: 'normal'
@@ -111,7 +111,7 @@ describe('Camada de Serviço: pedido.service', () => {
 
     test('Ordem 2: deve lançar 400 se o status for inválido após validar existência', () => {
       const pedido = pedidoService.criarPedido({
-        cliente: 'Julia',
+        cliente: 'Pedro Akylas',
         tipo: 'entrega',
         valor: 60,
         prioridade: 'normal'
@@ -123,7 +123,7 @@ describe('Camada de Serviço: pedido.service', () => {
 
     test('deve rejeitar transição para o mesmo status atual', () => {
       const pedido = pedidoService.criarPedido({
-        cliente: 'Julia',
+        cliente: 'Pedro Akylas',
         tipo: 'entrega',
         valor: 60,
         prioridade: 'normal'
