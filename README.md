@@ -24,7 +24,8 @@
 
 - **Armazenamento:** memória (`Map` em `pedido.repository.js`), sem banco de dados.
 - **Módulos:** CommonJS (`require/module.exports`).
-- **Sem variáveis de ambiente, senhas ou tokens.**
+- **Configuração:** a variável opcional `PORT` define a porta do servidor (padrão `3000`).
+- **Sem senhas ou tokens.**
 
 ---
 
@@ -39,9 +40,12 @@ npm start
 
 # 3. Rodar todos os testes
 npm test
+
+# 4. Gerar relatório de cobertura
+npm run test:coverage
 ```
 
-> O servidor fica disponível em `http://localhost:3000`.
+> O servidor fica disponível em `http://localhost:3000` por padrão. Para usar outra porta, configure `PORT` com um inteiro entre `1` e `65535` antes de iniciar.
 
 ---
 
@@ -53,7 +57,8 @@ pizzaflow-api/
 │   ├── server.js                        → Ponto de entrada: app.listen()
 │   ├── app.js                           → Express, middlewares, rotas, 404 e erro global
 │   ├── config/
-│   │   └── dominio.js                   → Constantes e máquina de estados
+│   │   ├── dominio.js                   → Constantes e máquina de estados
+│   │   └── servidor.js                  → Validação da porta HTTP configurada
 │   ├── routes/
 │   │   └── pedido.routes.js             → Mapeia método + rota → controller
 │   ├── controllers/
@@ -75,6 +80,7 @@ pizzaflow-api/
 │   ├── pedido.validator.test.js         → Testes unitários do validator
 │   ├── pedido.service.test.js           → Testes unitários do service
 │   ├── pedido.repository.test.js        → Testes unitários do repository
+│   ├── servidor.test.js                 → Testes da configuração da porta
 │   └── pedido.routes.test.js            → Testes de integração com Supertest
 ├── evidencias/
 │   ├── pizzaflow-api.postman_collection.json
@@ -105,6 +111,15 @@ pizzaflow-api/
 ---
 
 ## Endpoints
+
+### GET /health — Verificar disponibilidade
+
+**Resposta de sucesso (200 OK):**
+```json
+{
+  "status": "ok"
+}
+```
 
 ### POST /pedidos — Cadastrar pedido
 
@@ -167,6 +182,14 @@ GET /pedidos HTTP/1.1
 ]
 ```
 > Retorna array vazio `[]` se não houver pedidos.
+
+Filtros opcionais podem ser combinados:
+
+```http
+GET /pedidos?tipo=entrega&status=em_preparacao HTTP/1.1
+```
+
+Os valores de `tipo` e `status` devem corresponder às opções permitidas pelo domínio. Filtros desconhecidos ou inválidos retornam `400 Bad Request`.
 
 ---
 
